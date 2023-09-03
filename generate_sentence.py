@@ -1,8 +1,8 @@
-import cv2
 import numpy as np
 import math
 import time
 import tkinter as tk
+import cv2
 from tkinter import Text, Button, Scrollbar  # Import Scrollbar widget
 from tensorflow import keras
 from cvzone.HandTrackingModule import HandDetector
@@ -11,14 +11,14 @@ from cvzone.ClassificationModule import Classifier
 # Create a Tkinter window
 root = tk.Tk()
 root.title("Sign Detection")
-root.geometry("800x600")
+root.geometry("600x400")  # Reduced the size of the GUI
 
 # Create a Scrollbar
 scrollbar = Scrollbar(root)
 scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
 # Create a textarea to display the composed sentence and configure it to use the scrollbar
-text_area = Text(root, font=("Helvetica", 20), yscrollcommand=scrollbar.set)
+text_area = Text(root, font=("Helvetica", 16), yscrollcommand=scrollbar.set)
 text_area.pack(pady=20)
 
 # Configure the scrollbar to work with the text_area
@@ -33,11 +33,11 @@ button_frame.pack(side=tk.BOTTOM)
 
 def send_text():
     composed_sentence = text_area.get("1.0", tk.END)
-
-
     # You can add code here to send the composed sentence to your desired destination
+
+
 send_button = Button(button_frame, text="Send", command=send_text, font=(
-    "Helvetica", 16), relief=tk.RAISED, borderwidth=3, bg="green", fg="white")
+    "Helvetica", 14), relief=tk.RAISED, borderwidth=2, bg="green", fg="white")
 send_button.pack(side=tk.LEFT, padx=10)
 
 
@@ -46,7 +46,7 @@ def discard_text():
 
 
 discard_button = Button(button_frame, text="Discard", command=discard_text, font=(
-    "Helvetica", 16), relief=tk.RAISED, borderwidth=3, bg="red", fg="white")
+    "Helvetica", 14), relief=tk.RAISED, borderwidth=2, bg="red", fg="white")
 discard_button.pack(side=tk.LEFT, padx=10)
 
 detector = HandDetector(maxHands=1)
@@ -59,7 +59,7 @@ imgSize = 300
 labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
 sentence = ""
 last_detection_time = time.time()
-detection_interval = 3  # interval for detection in seconds
+detection_interval = 5  # interval for detection in seconds
 
 while True:
     success, img = cap.read()
@@ -103,10 +103,6 @@ while True:
         text_area.delete("1.0", tk.END)  # Clear previous text
         # Display composed sentence in sentence case
         text_area.insert(tk.END, sentence.capitalize())
-
-        # Display the detected sign on the OpenCV window in sentence case
-        cv2.putText(imgOutput, detected_sign, (50, 50),
-                    cv2.FONT_HERSHEY_COMPLEX, 2, (0, 255, 0), 3)
 
         # Update the last detection time
         last_detection_time = current_time
